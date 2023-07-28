@@ -93,6 +93,7 @@ function buildDropDown() {
     });
 
     displayEvents(currentEvents);
+    displayStats(events);
 }
 
 function displayEvents(events) {
@@ -115,7 +116,7 @@ function displayEvents(events) {
         let eventNameCell = tableRow.querySelector('[data-id="event"]');
         eventNameCell.innerText = event.event;
 
-        
+
         tableRow.querySelector('[data-id="city"]').innerText = event.city;
         tableRow.querySelector('[data-id="state"]').innerText = event.state;
         tableRow.querySelector('[data-id="attendance"]').innerText = event.attendance;
@@ -129,4 +130,34 @@ function displayEvents(events) {
 
 
 
+}
+
+function displayStats(events) {
+
+    let total = 0;
+    let max = 0;
+    let min = events[0].attendance;
+
+
+    for (let index = 0; index < events.length; index = index + 1) {
+        let event = events[index];
+
+        total = total + event.attendance;
+
+        if (event.attendance > max) {
+            max = event.attendance;
+        }
+
+        if (event.attendance < min) {
+            min = event.attendance;
+        }
+
+    }
+
+    let average = total / events.length;
+
+    document.getElementById('total-attendance').innerHTML = total.toLocaleString();
+    document.getElementById('avg-attendance').innerHTML = Math.round(average).toLocaleString();
+    document.getElementById('max-attended').innerHTML = max.toLocaleString();
+    document.getElementById('min-attended').innerHTML = min.toLocaleString();
 }
