@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/css/site.css">
 </head>
 
-<body>
+<body onload="buildDropDown()">
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
@@ -48,7 +48,8 @@
                             <a class="nav-link" href="https://github.com/aberry2288/" target="_blank">The Repo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="https://adamberrysportfolio.netlify.app/#about" target="_blank">About</a>
+                            <a class="nav-link" href="https://adamberrysportfolio.netlify.app/#about"
+                                target="_blank">About</a>
                         </li>
                         <!-- Need to add blog link -->
                         <li class="nav-item">
@@ -61,9 +62,67 @@
     </header>
 
     <main class="container py-3">
-        <h1>APP UI GOES HERE</h1>
-        <input class="form-control my-3" id="message" placeholder="Enter a message" type="text">
-        <button class="btn btn-primary" id="btnSubmit" type="button">Display Message</button>
+        <div class="row row-cols-1 row-cols-md-2">
+            <div class="col">
+                <!--Stats w dropdown (from bootstrap docs)-->
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Pick a Location
+                    </button>
+                    <ul class="dropdown-menu" id="city-dropdown">
+                        <!-- Cities go here-->
+                    </ul>
+                </div>
+                <table class="table table-striped border mt-1 shadow">
+                    <thead class="table-dark">
+                        <tr>
+                            <th colspan="2">Stats For All Events</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Attendance</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>Average Attendance</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>Most Attended</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>Least Attended</td>
+                            <td>100</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col order-first order-md-last">
+                <img class="img-fluid p-3" src="/img/Event Tracker Logo.png">
+            </div>
+        </div>
+        <div class="mt-4">
+            <button class="btn btn-primary my-3">Add Data</button>
+            <div class="table-responsive">
+                <table class="table table-striped border shadow">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="text-nowrap">Event Name</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Attendance</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="events-table">
+                        <!--Events go here-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 
     <footer class="footer container-fluid py-3">
@@ -85,6 +144,20 @@
         </div>
     </footer>
 
+    <template id="drowdown-template">
+        <li><a class="dropdown-item" href="#"></a></li>
+    </template>
+
+    <template id="table-row-template">
+        <tr>
+            <td data-id="event"></td>
+            <td data-id="city"></td>
+            <td data-id="state"></td>
+            <td data-id="attendance"></td>
+            <td data-id="date"></td>
+        </tr>
+    </template> 
+
 
 
     <!-- Bootstrap JS -->
@@ -95,12 +168,10 @@
     <!-- Sweet alerts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Customer JavaScript Page -->
+    <!-- Custom JavaScript Page -->
     <script src="/js/site.js"></script>
 
-    <script>
-        document.getElementById('btnSubmit').addEventListener('click', displayMessage);
-    </script>
+   
 </body>
 
 </html>
