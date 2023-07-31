@@ -65,7 +65,17 @@ const events = [
 ];
 
 function getEvents() {
-    return events;
+
+    let storedString = localStorage.getItem('asb-events') || '[]';
+    
+    let storedEvents = JSON.parse(storedString);
+
+    if (storedEvents.length == 0) {
+        storedEvents = events;
+        localStorage.setItem('asb-events' , JSON.stringify(events));
+    }
+
+    return storedEvents;
 }
 
 function buildDropDown() {
@@ -81,6 +91,8 @@ function buildDropDown() {
     const dropdownDiv = document.getElementById('city-dropdown');
     const dropdownItemTemplate = document.getElementById('drowdown-template');
 
+    dropdownDiv.innerHTML = '',
+
     //copy dropdown template for each unique city and change text, put it in the dropdown
 
     dropdownChoices.forEach(choice => {
@@ -92,6 +104,7 @@ function buildDropDown() {
         dropdownDiv.appendChild(dropdownItemCopy);
     });
 
+    document.getElementById('stats-location').textContent = 'All';
     displayEvents(currentEvents);
     displayStats(events);
 }
@@ -119,8 +132,8 @@ function displayEvents(events) {
 
         tableRow.querySelector('[data-id="city"]').innerText = event.city;
         tableRow.querySelector('[data-id="state"]').innerText = event.state;
-        tableRow.querySelector('[data-id="attendance"]').innerText = event.attendance;
-        tableRow.querySelector('[data-id="date"]').innerText = event.date;
+        tableRow.querySelector('[data-id="attendance"]').innerText = event.attendance.toLocaleString();
+        tableRow.querySelector('[data-id="date"]').innerText = new Date(event.date).toLocaleDateString();
 
 
         //insert event data on table
@@ -161,3 +174,80 @@ function displayStats(events) {
     document.getElementById('max-attended').innerHTML = max.toLocaleString();
     document.getElementById('min-attended').innerHTML = min.toLocaleString();
 }
+
+function filterEvents(dropdownItemClicked) {
+
+    let cityName = dropdownItemClicked.innerText;
+
+    document.getElementById('stats-location').textContent = cityName;
+
+    let allEvents = getEvents();
+
+    let filteredEvents = [];
+
+    if (cityName == 'All') {
+
+        filteredEvents = allEvents;
+
+    } else {
+
+        for (let i = 0; i < allEvents.length; i = i + 1) {
+
+            let event = allEvents[i];
+
+            if (event.city == cityName) {
+                filteredEvents.push(event);
+            }
+        }
+
+        // This is another way to write the for loop that works just as good, just put this after else {
+        // filteredEvents = allEvents.filter(event => event.city == cityName); 
+    }
+
+    displayStats(filteredEvents);
+    displayEvents(filteredEvents);
+
+}
+
+function saveEvent() {
+
+    let eventName = document.getElementById('newEventName').value;
+
+    let city = document.getElementById('newEventCity').value;
+
+    let stateSelect = document.getElementById('newEventState');
+    let selectedIndex = stateSelect.selectedIndex;
+    let selectedOption = stateSelect.options[selectedIndex];
+    let state = selectedOption.text;
+
+    let attendance = parseInt(document.getElementById('newEventAttendance').value);
+    
+    let dateString = document.getElementById('newEventDate').value;
+    dateString = `${dateString} 00:00`;
+    let eventDate = new Date(dateString).toLocaleDateString();
+
+    let newEvent = {
+
+        event: eventName,
+        city: city,
+        state: state,
+        attendance: attendance,
+        date: eventDate,
+
+    };
+
+    let allEvents = getEvents();
+
+    allEvents.push(newEvent);
+
+    localStorage.setItem('asb-events' , JSON.stringify(allEvents));
+
+    document.getElementById('newEventForm').reset();
+
+    buildDropDown();
+}
+
+
+
+
+
