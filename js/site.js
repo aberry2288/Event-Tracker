@@ -245,7 +245,12 @@ function saveEvent() {
     document.getElementById('newEventForm').reset();
 
     buildDropDown();
+
+    let modal = bootstrap.Modal.getInstance(document.getElementById('newEventModal'));
+    modal.hide();
 }
+
+
 
 
 
